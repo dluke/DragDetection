@@ -43,7 +43,6 @@ def ugly_method(image,coordinate_gen):
 
     # Load a color image in grayscale
     img = cv2.imread(image)
-    print img[0][0]
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -62,8 +61,6 @@ def ugly_method(image,coordinate_gen):
             count = count + 1
             cv2.drawContours(img, [cnt], 0, (0,255,0), 3)
 
-    print "count"
-    print count
     sorted_squares = sorted(squares, key=lambda k: k['area'])
     big_square_contour = sorted_squares[-2]['contour']
 
@@ -81,8 +78,11 @@ def ugly_method(image,coordinate_gen):
 
 random_id = random.sample(xrange(100000),1)[0]
 obj = open('test'+ str(random_id) + '.json','wb')
+obj.write('[')
 for i in xrange(100):
     dic = ugly_method(image,coordinate_gen)
     obj.write(json.dumps(dic))
+    obj.write(',')
+obj.write(']')
 obj.close
 
