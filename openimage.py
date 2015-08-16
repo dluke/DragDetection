@@ -1,8 +1,15 @@
 
+help  = 'run this with an image as first argument'
+
+
 import numpy as np
 import cv2
 
 import sys
+
+if len(sys.argv) != 1:
+    print help
+    sys.exit()
 
 image = sys.argv[1]
 
