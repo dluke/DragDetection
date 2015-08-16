@@ -7,6 +7,7 @@ image = sys.argv[1]
 
 # Load an color image in grayscale
 img = cv2.imread(image)
+print img[0][0]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -17,7 +18,7 @@ cv2.destroyAllWindows()
 
 ret,thresh = cv2.threshold(gray,127,255,0)
 
-contours,h = cv2.findContours(thresh,1,2)
+contours,h = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
 squares = []
 count = 0
@@ -31,7 +32,21 @@ for cnt in contours:
 
 sorted_squares = sorted(squares, key=lambda k: k['area'])
 big_square_contour = sorted_squares[-2]['contour']
-cv2.drawContours(img,[big_square_contour],0,(128,255,0),4)
+
+M = cv2.moments(big_square_contour)
+cx = int(M['m10']/M['m00'])
+cy = int(M['m01']/M['m00'])
+
+
+print "BIG SQUARE CONTOUR COLOUR BGR"
+print img[cx][cy] 
+
+# mask = np.zeros(gray.shape,np.uint8)
+# cv2.drawContours(mask,[big_square_contour],0,255,-1)
+# pixelpoints = np.transpose(nps.nonzero(mask))
+# print "pixel points"
+# print pixelpoints[0]
+cv2.drawContours(img,[big_square_contour],0,(173,186,194),4)
 
 
 print 'count', count
