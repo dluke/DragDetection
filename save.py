@@ -3,14 +3,6 @@ import cv2
 
 import sys
 
-
-def RGBToHTMLColor(rgb_tuple):
-    """ convert an (R, G, B) tuple to #RRGGBB """
-    hexcolor = '#%02x%02x%02x' % rgb_tuple
-    # that's it! '%02x' means zero-padded, 2-digit hex values
-    return hexcolor
-
-
 image = sys.argv[1]
 
 # Load an color image in grayscale
@@ -37,10 +29,7 @@ for cnt in contours:
     if len(approx)==4 and (area > 10000):
         squares.append({'area': area, 'contour':cnt})
         count = count + 1
-        cv2.drawContours(img, [cnt], 0, (0,255,0), 3)
 
-print "count"
-print count
 sorted_squares = sorted(squares, key=lambda k: k['area'])
 big_square_contour = sorted_squares[-2]['contour']
 M = cv2.moments(big_square_contour)
@@ -59,12 +48,10 @@ mean_val = cv2.mean(img,mask = mask)
 
 print "pixel points"
 print mean_val
-print "rgb mean value"
-print RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
 
 
 
-cv2.drawContours(img,[big_square_contour],0,(58,70,183),4)
+#cv2.drawContours(img,[big_square_contour],0,(58,70,183),4)
 
 
 
@@ -74,4 +61,3 @@ cv2.namedWindow('img', cv2.WINDOW_NORMAL)
 cv2.imshow('img',img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
