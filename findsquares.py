@@ -32,7 +32,6 @@ for cnt in contours:
 
 sorted_squares = sorted(squares, key=lambda k: k['area'])
 big_square_contour = sorted_squares[-2]['contour']
-
 M = cv2.moments(big_square_contour)
 cx = int(M['m10']/M['m00'])
 cy = int(M['m01']/M['m00'])
@@ -41,12 +40,19 @@ cy = int(M['m01']/M['m00'])
 print "BIG SQUARE CONTOUR COLOUR BGR"
 print img[cx][cy] 
 
-# mask = np.zeros(gray.shape,np.uint8)
-# cv2.drawContours(mask,[big_square_contour],0,255,-1)
-# pixelpoints = np.transpose(nps.nonzero(mask))
-# print "pixel points"
-# print pixelpoints[0]
-cv2.drawContours(img,[big_square_contour],0,(173,186,194),4)
+mask = np.zeros(gray.shape,np.uint8)
+cv2.drawContours(mask,[big_square_contour],0,255,-1)
+pixelpoints = np.transpose(np.nonzero(mask))
+mean_val = cv2.mean(img,mask = mask)
+
+
+print "pixel points"
+print mean_val
+
+
+
+cv2.drawContours(img,[big_square_contour],0,(58,70,183),4)
+
 
 
 print 'count', count
