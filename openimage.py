@@ -7,10 +7,6 @@ import cv2
 
 import sys
 
-if len(sys.argv) != 1:
-    print help
-    sys.exit()
-
 image = sys.argv[1]
 
 # Load an color image in grayscale
