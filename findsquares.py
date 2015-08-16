@@ -1,8 +1,13 @@
 import numpy as np
 import cv2
+import json
+import random
+import numpy as np
 
 import sys
 
+
+# RGB for JSON #
 
 def RGBToHTMLColor(rgb_tuple):
     """ convert an (R, G, B) tuple to #RRGGBB """
@@ -10,10 +15,32 @@ def RGBToHTMLColor(rgb_tuple):
     # that's it! '%02x' means zero-padded, 2-digit hex values
     return hexcolor
 
+# random location generator for JSON #
+
+def random_lattitutde_generator():
+    top = 55.95493
+    bot = 55.89530
+    yrange = np.linspace(bot, top, 10000)
+
+    left = -3.14166
+    right = -3.33735
+    xxrange = np.linspace(right, left, 10000)
+
+    count = 1
+    while True:
+        y = random.sample(yrange, 1)[0]
+        x = random.sample(xxrange, 1)[0]
+        yield (x, y), count
+        count = count + 1
+
+coordinate_gen = random_lattitutde_generator()
+
+
+# opencv fun #
 
 image = sys.argv[1]
 
-# Load an color image in grayscale
+# Load a color image in grayscale
 img = cv2.imread(image)
 print img[0][0]
 
@@ -43,7 +70,14 @@ mask = np.zeros(gray.shape,np.uint8)
 cv2.drawContours(mask,[big_square_contour],0,255,-1)
 pixelpoints = np.transpose(np.nonzero(mask))
 mean_val = cv2.mean(img,mask = mask)
-html_color = RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
-print html_color
 
+# consolidating data into a JSON #
+html_color = RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
+(lon,lat),count= coordinate_gen.next()
+dic = {u'id':count,u'color':html_color, u'latitude':lat,u'longitude':lon}
+output_filename = 'data' + str(count) + '.json'
+
+
+with open(output_filename, 'w') as outfile:
+    json.dumps(dic)
 
