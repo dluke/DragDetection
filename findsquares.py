@@ -30,8 +30,7 @@ def random_lattitutde_generator():
     while True:
         y = random.sample(yrange, 1)[0]
         x = random.sample(xxrange, 1)[0]
-        yield (x, y), count
-        count = count + 1
+        yield (x, y)
 
 coordinate_gen = random_lattitutde_generator()
 
@@ -73,11 +72,14 @@ mean_val = cv2.mean(img,mask = mask)
 
 # consolidating data into a JSON #
 html_color = RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
-(lon,lat),count= coordinate_gen.next()
-dic = {u'id':count,u'color':html_color, u'latitude':lat,u'longitude':lon}
+(lon,lat)= coordinate_gen.next()
+random_id = random.sample(xrange(1000),1)[0]
+dic = {u'id':random_id,u'color':html_color, u'latitude':lat,u'longitude':lon}
 output_filename = 'data' + str(count) + '.json'
 
 
-with open(output_filename, 'w') as outfile:
-    json.dumps(dic)
+
+obj = open('test'+ str(random_id) + '.json','wb')
+obj.write(json.dumps(dic))
+obj.close
 
