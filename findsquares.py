@@ -19,11 +19,6 @@ print img[0][0]
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-cv2.namedWindow('gray', cv2.WINDOW_NORMAL)
-cv2.imshow('gray', gray)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
 ret,thresh = cv2.threshold(gray,127,255,0)
 
 contours,h = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
@@ -40,35 +35,12 @@ for cnt in contours:
 
 sorted_squares = sorted(squares, key=lambda k: k['area'])
 big_square_contour = sorted_squares[-2]['contour']
-M = cv2.moments(big_square_contour)
-cx = int(M['m10']/M['m00'])
-cy = int(M['m01']/M['m00'])
-
-
-print "BIG SQUARE CONTOUR COLOUR BGR"
-print img[cx][cy] 
 
 mask = np.zeros(gray.shape,np.uint8)
 cv2.drawContours(mask,[big_square_contour],0,255,-1)
 pixelpoints = np.transpose(np.nonzero(mask))
 mean_val = cv2.mean(img,mask = mask)
+html_color = RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
+print html_color
 
-
-print "pixel points"
-print mean_val
-print "rgb mean value"
-print RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
-
-
-
-cv2.drawContours(img,[big_square_contour],0,(58,70,183),4)
-
-
-
-print 'count', count
-
-cv2.namedWindow('img', cv2.WINDOW_NORMAL)
-cv2.imshow('img',img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
 
