@@ -39,47 +39,50 @@ coordinate_gen = random_lattitutde_generator()
 
 image = sys.argv[1]
 
-# Load a color image in grayscale
-img = cv2.imread(image)
-print img[0][0]
+def ugly_method(image,coordinate_gen):
 
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Load a color image in grayscale
+    img = cv2.imread(image)
+    print img[0][0]
 
-ret,thresh = cv2.threshold(gray,127,255,0)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-contours,h = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    ret,thresh = cv2.threshold(gray,127,255,0)
 
-squares = []
-count = 0
-for cnt in contours:
-    approx = cv2.approxPolyDP(cnt,0.1*cv2.arcLength(cnt,True),True)
-    area = cv2.contourArea(cnt)
+    contours,h = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
-    if len(approx)==4 and (area > 10000):
-        squares.append({'area': area, 'contour':cnt})
-        count = count + 1
-        cv2.drawContours(img, [cnt], 0, (0,255,0), 3)
+    squares = []
+    count = 0
+    for cnt in contours:
+        approx = cv2.approxPolyDP(cnt,0.1*cv2.arcLength(cnt,True),True)
+        area = cv2.contourArea(cnt)
 
-print "count"
-print count
-sorted_squares = sorted(squares, key=lambda k: k['area'])
-big_square_contour = sorted_squares[-2]['contour']
+        if len(approx)==4 and (area > 10000):
+            squares.append({'area': area, 'contour':cnt})
+            count = count + 1
+            cv2.drawContours(img, [cnt], 0, (0,255,0), 3)
 
-mask = np.zeros(gray.shape,np.uint8)
-cv2.drawContours(mask,[big_square_contour],0,255,-1)
-pixelpoints = np.transpose(np.nonzero(mask))
-mean_val = cv2.mean(img,mask = mask)
+    print "count"
+    print count
+    sorted_squares = sorted(squares, key=lambda k: k['area'])
+    big_square_contour = sorted_squares[-2]['contour']
 
-# consolidating data into a JSON #
-html_color = RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
-(lon,lat)= coordinate_gen.next()
-random_id = random.sample(xrange(1000),1)[0]
-dic = {u'id':random_id,u'color':html_color, u'latitude':lat,u'longitude':lon}
-output_filename = 'data' + str(count) + '.json'
+    mask = np.zeros(gray.shape,np.uint8)
+    cv2.drawContours(mask,[big_square_contour],0,255,-1)
+    pixelpoints = np.transpose(np.nonzero(mask))
+    mean_val = cv2.mean(img,mask = mask)
 
+    # consolidating data into a JSON #
+    html_color = RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
+    (lon,lat)= coordinate_gen.next()
+    random_id = random.sample(xrange(100000),1)[0]
+    dic = {u'id':random_id,u'value':html_color, u'latitude':lat,u'longitude':lon}
+    return dic
 
-
+random_id = random.sample(xrange(100000),1)[0]
 obj = open('test'+ str(random_id) + '.json','wb')
-obj.write(json.dumps(dic))
+for i in xrange(100):
+    dic = ugly_method(image,coordinate_gen)
+    obj.write(json.dumps(dic))
 obj.close
 
