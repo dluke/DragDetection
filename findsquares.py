@@ -73,7 +73,7 @@ def ugly_method(image,coordinate_gen):
     html_color = RGBToHTMLColor((mean_val[2],mean_val[1],mean_val[0]))
     (lon,lat)= coordinate_gen.next()
     random_id = random.sample(xrange(100000),1)[0]
-    dic = {u'id':random_id,u'value':html_color, u'latitude':lat,u'longitude':lon}
+    dic = {u'id':str(random_id),u'value':str(html_color), u'latitude':str(lat),u'longitude':str(lon)}
     return dic
 
 random_id = random.sample(xrange(100000),1)[0]
