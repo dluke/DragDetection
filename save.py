@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-
 import sys
 
 image = sys.argv[1]
