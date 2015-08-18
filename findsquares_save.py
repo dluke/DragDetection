@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-
 import sys
 
 image = sys.argv[1]
@@ -47,14 +46,7 @@ print "x, y, z"
 print x, y, z
 color = (x, y, z)
 
-
-# mask = np.zeros(gray.shape,np.uint8)
-# cv2.drawContours(mask,[big_square_contour],0,255,-1)
-# pixelpoints = np.transpose(nps.nonzero(mask))
-# print "pixel points"
-# print pixelpoints[0]
 cv2.drawContours(img,[big_square_contour],0, (46, 65, 180),40)
-
 
 print 'count', count
 

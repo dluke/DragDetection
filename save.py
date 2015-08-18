@@ -45,16 +45,8 @@ cv2.drawContours(mask,[big_square_contour],0,255,-1)
 pixelpoints = np.transpose(np.nonzero(mask))
 mean_val = cv2.mean(img,mask = mask)
 
-
 print "pixel points"
 print mean_val
-
-
-
-#cv2.drawContours(img,[big_square_contour],0,(58,70,183),4)
-
-
-
 print 'count', count
 
 cv2.namedWindow('img', cv2.WINDOW_NORMAL)

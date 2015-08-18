@@ -1,6 +1,8 @@
 import random
 import numpy as np
 
+# generates random locations almost in Edinburgh
+
 def random_lattitutde_generator():
 	top = 55.95493
 	bot = 55.89530
